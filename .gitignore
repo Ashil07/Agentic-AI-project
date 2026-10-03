@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Secrets (never commit API keys)
+.env
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Downloads in progress
+*.part
+
+# The FAISS index in vectorstore/ IS committed on purpose, so teammates
+# can use the retriever without a ~7 minute rebuild.

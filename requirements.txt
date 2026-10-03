@@ -1,0 +1,17 @@
+# --- Member 1: RAG / Knowledge Base ---
+langchain-core>=1.0
+langchain-community>=0.4
+langchain-text-splitters>=1.0
+langchain-huggingface>=1.0
+sentence-transformers>=3.0
+faiss-cpu>=1.8
+pypdf>=5.0
+python-dotenv>=1.0
+
+# --- Testing ---
+pytest>=8.0
+
+# --- Other members (uncomment / add as you integrate) ---
+# langchain-groq        # Member 2: Groq LLM
+# langgraph             # Member 3: workflow + study planner
+# streamlit             # Member 4: UI
