@@ -1,0 +1,61 @@
+{
+  "college": "NMAM Institute of Technology (NMAMIT), Nitte, Karkala Taluk, Udupi District, Karnataka",
+  "note": "PDFs are official public documents downloaded from nitte.edu.in. Text files are summaries compiled from those PDFs, with page references.",
+  "documents": [
+    {
+      "file": "pdfs/NMAMIT_BTech_CS_Regulations_2023.pdf",
+      "title": "B.Tech CSE Regulations & Curriculum 2023",
+      "doc_type": "regulations_and_syllabus",
+      "applies_to": "B.Tech students admitted from 2023-24 (NITTE Deemed to be University, CBCS)",
+      "url": "https://nitte.edu.in/nmamit/syllabus/ndu/2023-27/B.Tech._CS_Regulations_2023.pdf"
+    },
+    {
+      "file": "pdfs/NMAMIT_BTech_First_Year_Regulations_Scheme_Syllabus_2025.pdf",
+      "title": "B.Tech First Year Regulations, Scheme & Syllabus 2025 (Draft)",
+      "doc_type": "regulations_and_syllabus",
+      "applies_to": "B.Tech first-year students, 2025 scheme (draft version)",
+      "url": "https://nitte.edu.in/nmamit/syllabus/ndu/NDU_B.Tech_First_Year_Regulations_Scheme_and_Syllabus_Draft_Version_2025.pdf"
+    },
+    {
+      "file": "pdfs/NMAMIT_Rules_and_Regulations_160_credits.pdf",
+      "title": "NMAMIT Regulations 2024-25 (160 credits)",
+      "doc_type": "regulations",
+      "applies_to": "B.E. students admitted from 2021-22 (160-credit scheme)",
+      "url": "https://nitte.edu.in/nmamit/img/rules/Rules%20&%20Regulations%20(160%20credits).pdf"
+    },
+    {
+      "file": "pdfs/NMAMIT_CSE_VII_VIII_Sem_Syllabus.pdf",
+      "title": "CSE VII & VIII Semester College Calendar & Syllabus 2024-25",
+      "doc_type": "syllabus",
+      "applies_to": "B.E. CSE VII and VIII semester students, 2024-25",
+      "url": "https://nitte.edu.in/nmamit/syllabus/cse/CS-VII%20&%20VIII.pdf"
+    },
+    {
+      "file": "text/nmamit_student_faq.md",
+      "title": "NMAMIT Student FAQ",
+      "doc_type": "faq",
+      "applies_to": "All NMAMIT undergraduate students (each answer says which batch it applies to)",
+      "url": ""
+    },
+    {
+      "file": "text/nmamit_internship_guidelines.md",
+      "title": "NMAMIT Internship Guidelines (summary)",
+      "doc_type": "internship_guidelines",
+      "applies_to": "B.Tech students admitted from 2023-24",
+      "url": "https://nitte.edu.in/nmamit/syllabus/ndu/2023-27/B.Tech._CS_Regulations_2023.pdf"
+    },
+    {
+      "file": "text/nmamit_examination_guidelines.md",
+      "title": "NMAMIT Examination Guidelines (summary)",
+      "doc_type": "examination_guidelines",
+      "applies_to": "B.Tech (2023-24 onwards) and B.E. (2021-22 onwards) students",
+      "url": "https://nitte.edu.in/nmamit/syllabus/ndu/2023-27/B.Tech._CS_Regulations_2023.pdf"
+    }
+  ],
+  "download_urls": {
+    "pdfs/NMAMIT_BTech_CS_Regulations_2023.pdf": "https://nitte.edu.in/nmamit/syllabus/ndu/2023-27/B.Tech._CS_Regulations_2023.pdf",
+    "pdfs/NMAMIT_BTech_First_Year_Regulations_Scheme_Syllabus_2025.pdf": "https://nitte.edu.in/nmamit/syllabus/ndu/NDU_B.Tech_First_Year_Regulations_Scheme_and_Syllabus_Draft_Version_2025.pdf",
+    "pdfs/NMAMIT_Rules_and_Regulations_160_credits.pdf": "https://nitte.edu.in/nmamit/img/rules/Rules%20&%20Regulations%20(160%20credits).pdf",
+    "pdfs/NMAMIT_CSE_VII_VIII_Sem_Syllabus.pdf": "https://nitte.edu.in/nmamit/syllabus/cse/CS-VII%20&%20VIII.pdf"
+  }
+}
