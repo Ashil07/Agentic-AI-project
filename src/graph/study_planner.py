@@ -75,7 +75,29 @@ def weekdays_in(text: str) -> list[int]:
         w = m.group(1)
         found.append(WEEKDAYS.index(w) if w in WEEKDAYS else ALIASES[w])
     return sorted(set(found))
+def parse_day_hour_constraints(text: str) -> list[tuple[list[int], float]]:
+    """Parse phrases such as '2 hours on weekdays and 5 hours on weekends'."""
+    constraints = []
 
+    pattern = re.compile(
+        r"(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\b"
+        r"\s*(?:on|for)\s*"
+        r"(weekdays?|weekends?)",
+        re.I,
+    )
+
+    for match in pattern.finditer(text):
+        hours = float(match.group(1))
+        target = match.group(2).lower()
+
+        if target.startswith("weekday"):
+            days = [0, 1, 2, 3, 4]
+        else:
+            days = [5, 6]
+
+        constraints.append((days, hours))
+
+    return constraints
 
 def parse_date_text(text: str, today: date) -> date | None:
     """Understands: 'in 3 weeks', 'tomorrow', 2026-11-20, 20/11/2026, '20 Nov', 'Nov 20 2026'."""
@@ -281,29 +303,48 @@ def apply_modification(spec: PlanSpec, text: str, today: date | None = None,
     changes: list[str] = []
     t = text.lower()
     days, hours = weekdays_in(t), parse_hours(t)
+    day_hour_constraints = parse_day_hour_constraints(t)
 
     if "exam" in t:
         nd = parse_date_text(t, today)
         if nd and nd > today:
             spec.exam_date = nd.isoformat()
             changes.append(f"Exam date set to {nd.isoformat()}.")
+    elif day_hour_constraints:
+        for constraint_days, constraint_hours in day_hour_constraints:
+            for wd in constraint_days:
+                spec.weekday_hours[wd] = constraint_hours
+
+            changes.append(
+                f"{', '.join(WEEKDAYS[w].title() for w in constraint_days)}: "
+                f"{constraint_hours:g} hour(s)."
+            )
+
     elif days:
         if hours is not None:
             for wd in days:
                 spec.weekday_hours[wd] = hours
-            changes.append(f"{', '.join(WEEKDAYS[w].title() for w in days)}: {hours:g} hour(s).")
+
+            changes.append(
+                f"{', '.join(WEEKDAYS[w].title() for w in days)}: "
+                f"{hours:g} hour(s)."
+            )
+
         elif re.search(_OFF, t):
             for wd in days:
                 spec.weekday_hours[wd] = 0.0
-            changes.append(f"{', '.join(WEEKDAYS[w].title() for w in days)}: rest day.")
-    elif hours is not None and re.search(r"per day|a day|daily|each day|every day|/day", t):
-        spec.hours_per_day = hours
-        changes.append(f"Default study time set to {hours:g} hours/day.")
-    elif hours is not None:
-        d = parse_date_text(t, today)
-        if d and today <= d < date.fromisoformat(spec.exam_date):
-            spec.date_hours[d.isoformat()] = hours
-            changes.append(f"{d.isoformat()}: {hours:g} hour(s).")
+
+            changes.append(
+                f"{', '.join(WEEKDAYS[w].title() for w in days)}: rest day."
+            )
+        elif hours is not None and re.search(r"per day|a day|daily|each day|every day|/day", t):
+            spec.hours_per_day = hours
+            changes.append(f"Default study time set to {hours:g} hours/day.")
+        elif hours is not None:
+            d = parse_date_text(t, today)
+            if d and today <= d < date.fromisoformat(spec.exam_date):
+                spec.date_hours[d.isoformat()] = hours
+                changes.append(f"{d.isoformat()}: {hours:g} hour(s).")
 
     m = re.search(r"\badd\s+(?!more\b)(.+?)(?:\s+(?:to|in|for)\b|[.;]|$)", text, re.I)
     if m:
