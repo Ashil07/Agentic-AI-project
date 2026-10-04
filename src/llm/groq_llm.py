@@ -16,7 +16,7 @@ load_dotenv()
 
 
 llm = ChatGroq(
-    model="llama-3.1-8b-instant",
+    model="openai/gpt-oss-20b",
     api_key=os.getenv("GROQ_API_KEY"),
     temperature=0
 )
@@ -134,3 +134,10 @@ def answer_question(question, session_id="default"):
         "answer": answer,
         "sources": result["sources"]
     }
+
+if __name__ == "__main__":
+    question = input("Ask your question: ")
+    result = answer_question(question)
+
+    print("\nAnswer:")
+    print(result["answer"])
