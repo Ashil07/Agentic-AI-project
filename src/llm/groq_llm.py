@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
+from src.rag import retrieve_context
 
 load_dotenv()
 
@@ -37,3 +38,22 @@ def ask_llm(question, context=""):
 
     response = llm.invoke(messages)
     return response.content
+    
+def answer_question(question):
+    result = retrieve_context(question)
+
+    if not result["found"]:
+        return {
+            "answer": "I could not find relevant information in the available NMAMIT documents.",
+            "sources": []
+        }
+
+    answer = ask_llm(
+        question=question,
+        context=result["context"]
+    )
+
+    return {
+        "answer": answer,
+        "sources": result["sources"]
+    }
