@@ -101,12 +101,12 @@ def academic_qa(state: State) -> dict:
         result = _answer_question(state["message"], session_id=state.get("session_id", "default"))
         return {"answer": result["answer"], "sources": result["sources"]}
     
-    return {"answer": "(stub - no LLM configured) Member 2 integration missing."}
+    raise RuntimeError("Member 2 integration missing. Ensure src.llm is configured.")
 
 # ---- study-planner branch --------------------------------------------------
 def create_plan(state: State) -> dict:
     if LLM is None:
-        return {"answer": "(stub - no LLM configured) Member 2 integration missing."}
+        raise RuntimeError("Member 2 integration missing. Ensure src.llm is configured.")
         
     spec, missing = sp.make_spec(state["message"], date.today(), LLM)
     if spec is None:
@@ -120,7 +120,7 @@ def create_plan(state: State) -> dict:
 
 def modify_plan(state: State) -> dict:
     if LLM is None:
-        return {"answer": "(stub - no LLM configured) Member 2 integration missing."}
+        raise RuntimeError("Member 2 integration missing. Ensure src.llm is configured.")
         
     spec = sp.PlanSpec.from_dict(state["plan_spec"])
     spec, changes = sp.apply_modification(spec, state["message"], date.today(), LLM)
@@ -162,7 +162,7 @@ def build_graph():
 
 graph = build_graph()
 
-def run_turn(message: str, session_id: str = "default", plan_spec: dict | None = None) -> dict:
+def run_turn(message: str, history: list | None = None, plan_spec: dict | None = None, session_id: str = "default") -> dict:
     """One conversation turn. Pass back result['plan_spec'] on the next call."""
     out = graph.invoke({"message": message, "session_id": session_id, "plan_spec": plan_spec})
     return {"answer": out.get("answer", ""), "intent": out.get("intent"),
