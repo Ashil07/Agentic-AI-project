@@ -1,14 +1,15 @@
 import os
-from dotenv import load_dotenv
+import re
 
+from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import ToolMessage
+from langchain_core.tools import StructuredTool
 
 from src.rag import retrieve_context
 from .memory import get_memory
 from .calculator import calculate
-from langchain_core.tools import StructuredTool
 
 
 load_dotenv()
@@ -84,8 +85,28 @@ def ask_llm(question, context="", history=None):
 
 
 def answer_question(question, session_id="default"):
-    result = retrieve_context(question)
     memory = get_memory(session_id)
+
+    # Allow mathematical questions to use the calculator
+    # even when no NMAMIT document is relevant.
+    if re.fullmatch(r"[\d\s+\-*/().%]+", question.strip()):
+        history = memory.messages
+
+        answer = ask_llm(
+            question=question,
+            context="",
+            history=history
+        )
+
+        memory.add_user_message(question)
+        memory.add_ai_message(answer)
+
+        return {
+            "answer": answer,
+            "sources": []
+        }
+
+    result = retrieve_context(question)
 
     if not result["found"]:
         answer = "I could not find relevant information in the available NMAMIT documents."
