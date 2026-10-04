@@ -89,7 +89,11 @@ def answer_question(question, session_id="default"):
 
     # Allow mathematical questions to use the calculator
     # even when no NMAMIT document is relevant.
-    if re.fullmatch(r"[\d\s+\-*/().%]+", question.strip()):
+    is_math = bool(re.fullmatch(r"[\d\s+\-*/().%]+", question.strip()) or 
+                   re.search(r"\b\d+\s*[+\-*/]\s*\d+\b", question) or
+                   re.search(r"\b(calculate|math|add|subtract|multiply|divide|sum|what is \d+)\b", question.lower()))
+    
+    if is_math:
         history = memory.messages
 
         answer = ask_llm(

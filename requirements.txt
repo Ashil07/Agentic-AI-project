@@ -14,4 +14,4 @@ pytest>=8.0
 # --- Other members (uncomment / add as you integrate) ---
 langchain-groq>=0.3     # Member 2: Groq LLM
 langgraph             # Member 3: workflow + study planner
-# streamlit             # Member 4: UI
+streamlit             # Member 4: UI
