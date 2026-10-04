@@ -1,17 +1,34 @@
 import os
 from dotenv import load_dotenv
+
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import ToolMessage
+
 from src.rag import retrieve_context
 from .memory import get_memory
+from .calculator import calculate
+from langchain_core.tools import StructuredTool
+
 
 load_dotenv()
+
 
 llm = ChatGroq(
     model="llama-3.1-8b-instant",
     api_key=os.getenv("GROQ_API_KEY"),
     temperature=0
 )
+
+
+calculator_tool = StructuredTool.from_function(
+    func=calculate,
+    name="calculator",
+    description="Use this tool to calculate mathematical expressions."
+)
+
+llm_with_tools = llm.bind_tools([calculator_tool])
+
 
 prompt = ChatPromptTemplate.from_messages([
     (
@@ -24,6 +41,8 @@ If the answer is not available in the provided context, clearly say:
 "I could not find relevant information in the available NMAMIT documents."
 
 Do not make up college-specific information.
+
+Use the calculator tool when the student asks for a mathematical calculation.
 
 College Context:
 {context}
@@ -44,7 +63,23 @@ def ask_llm(question, context="", history=None):
         question=question
     )
 
-    response = llm.invoke(messages)
+    response = llm_with_tools.invoke(messages)
+
+    if response.tool_calls:
+        messages.append(response)
+
+        for tool_call in response.tool_calls:
+            result = calculator_tool.invoke(tool_call["args"])
+
+            messages.append(
+                ToolMessage(
+                    content=str(result),
+                    tool_call_id=tool_call["id"]
+                )
+            )
+
+        response = llm_with_tools.invoke(messages)
+
     return response.content
 
 
@@ -54,6 +89,7 @@ def answer_question(question, session_id="default"):
 
     if not result["found"]:
         answer = "I could not find relevant information in the available NMAMIT documents."
+
         memory.add_user_message(question)
         memory.add_ai_message(answer)
 
