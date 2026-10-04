@@ -7,10 +7,15 @@ context, uses a tool, and creates and edits personalised study plans.
 **Stack:** RAG · LangChain · LangGraph · Groq LLM · Sentence Transformers · FAISS · Streamlit
 
 ```
-STUDENT → STREAMLIT UI → LANGGRAPH → QUESTION ANALYSIS
+STUDENT → STREAMLIT UI 
+              ↓
+          LANGGRAPH (Member 3) → QUESTION ANALYSIS
                                         ├─ study plan?  → STUDY PLANNER → PLAN REVIEW → END
-                                        └─ question     → RAG RETRIEVER (FAISS) → LANGCHAIN PROMPT + CONTEXT
-                                                          → LLM (Groq) → RESPONSE REVIEW → FINAL ANSWER
+                                        └─ question     → MEMBER 2 INTEGRATION
+                                                            ├─ Member 1 RAG Retrieval (FAISS)
+                                                            ├─ Conversation Memory
+                                                            ├─ Calculator Tool
+                                                            └─ Groq LLM → FINAL ANSWER + SOURCES
 ```
 
 ## Team
@@ -18,8 +23,8 @@ STUDENT → STREAMLIT UI → LANGGRAPH → QUESTION ANALYSIS
 | Member | Responsibility | Folder | Status |
 |---|---|---|---|
 | 1 | RAG / Knowledge Base: documents → chunks → embeddings → FAISS → retriever | `src/rag/` | ✅ Done |
-| 2 | LangChain / Groq LLM / prompts / memory / calculator tool | `src/llm/` | ⏳ |
-| 3 | LangGraph workflow + study planner | `src/graph/` | ⏳ |
+| 2 | LangChain / Groq LLM / prompts / memory / calculator tool | `src/llm/` | ✅ Done |
+| 3 | LangGraph workflow + study planner | `src/graph/` | ✅ Done |
 | 4 | Streamlit UI, integration, testing | `app.py` | ⏳ |
 
 ## Quick start
